@@ -11,6 +11,18 @@ function getTodayText() {
   return formatter.format(new Date());
 }
 
+// 日本時間の今日の日付を「2026-09-29」の形の文字にする（保存した日付とくらべるため）
+function getTodayKey() {
+  // "en-CA" を使うと「年-月-日」の形で日付が作られる
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return formatter.format(new Date());
+}
+
 // ヘッダーに今日の日付を表示する
 function showToday() {
   // 日付を表示する場所
@@ -57,15 +69,20 @@ function createItemCard(item) {
   return card;
 }
 
-// 保存されている持ち物をリストに表示する（今はまだ全部表示する）
+// 保存されている持ち物のうち、今日の日付のものだけをリストに表示する
 function showItems() {
   // カードを並べる場所
   const listElement = document.getElementById("item-list");
   listElement.innerHTML = "";
 
+  // 今日の日付（「2026-09-29」の形）
+  const today = getTodayKey();
   const items = loadItems();
   for (const item of items) {
-    listElement.appendChild(createItemCard(item));
+    // 日付が今日と同じものだけカードにする
+    if (item.date === today) {
+      listElement.appendChild(createItemCard(item));
+    }
   }
 }
 
