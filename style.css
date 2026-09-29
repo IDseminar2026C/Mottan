@@ -41,6 +41,19 @@ body {
   margin: 0;
 }
 
+/* 今日の持ち物がないときのメッセージ（うすい灰色・まん中） */
+.empty-message {
+  margin: 16px 0;
+  font-size: 16px;
+  color: #999999;
+  text-align: center;
+}
+
+/* 持ち物が1つ以上あって文字が空のときは、余白も出さない */
+.empty-message:empty {
+  display: none;
+}
+
 /* 持ち物カード1枚ぶん（はみ出した部分は見えないようにする） */
 .item-card {
   position: relative;

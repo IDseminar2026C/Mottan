@@ -121,12 +121,6 @@ function createItemCard(item) {
   content.className = "card-content";
   content.textContent = item.name;
 
-  // カードの中に出す日付
-  const dateElement = document.createElement("span");
-  dateElement.className = "item-date";
-  dateElement.textContent = formatDate(item.date);
-  content.appendChild(dateElement);
-
   card.appendChild(content);
   card.appendChild(createDeleteButton(item.id));
   addSwipe(card);
@@ -143,11 +137,25 @@ function showItems() {
   // 今日の日付（「2026-09-29」の形）
   const today = getTodayKey();
   const items = loadItems();
+  // 作ったカードの枚数
+  let count = 0;
   for (const item of items) {
     // 日付が今日と同じものだけカードにする
     if (item.date === today) {
       listElement.appendChild(createItemCard(item));
+      count = count + 1;
     }
+  }
+  showEmptyMessage(count);
+}
+
+// 今日の持ち物が0件のときだけ「今日の準備物はありません」と表示する
+function showEmptyMessage(count) {
+  const emptyElement = document.getElementById("empty-message");
+  if (count === 0) {
+    emptyElement.textContent = "今日の準備物はありません";
+  } else {
+    emptyElement.textContent = "";
   }
 }
 
