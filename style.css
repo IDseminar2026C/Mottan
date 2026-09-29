@@ -41,6 +41,23 @@ body {
   margin: 0;
 }
 
+/* 持ち物カード1枚ぶん */
+.item-card {
+  padding: 12px;
+  margin-bottom: 8px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* カードの中の日付（小さめ・うすい色） */
+.item-date {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: #777777;
+}
+
 /* 入力フォーム */
 .input {
   display: block;
@@ -61,4 +78,11 @@ body {
   background-color: #4a7bd0;
   border: none;
   border-radius: 8px;
+}
+
+/* 入力が足りないときの注意（赤い文字） */
+.error-message {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #d03030;
 }
