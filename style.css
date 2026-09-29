@@ -70,6 +70,39 @@ body {
   border-radius: 8px;
 }
 
+/* 日付の欄（表示と見えない日付の欄を重ねるための入れ物） */
+.date-area {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+/* 「日付を選択してください」の表示（まだ選んでいないのでうすい色） */
+.date-text {
+  margin-bottom: 0;
+  background-color: #ffffff;
+  color: #999999;
+}
+
+/* 日付を選んだあとは、ふつうの文字の色にする */
+.date-text.selected {
+  color: #333333;
+}
+
+/* 見えない日付の欄（表示の上にぴったり重ねる） */
+.date-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-sizing: border-box;
+  opacity: 0;
+  cursor: pointer;
+}
+
 .add-button {
   width: 100%;
   padding: 12px;

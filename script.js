@@ -75,6 +75,31 @@ function showError(message) {
   errorElement.textContent = message;
 }
 
+// 日付の欄を押したら、カレンダーを開く（パソコンのブラウザ用）
+function openCalendar() {
+  const dateInput = document.getElementById("item-date");
+  try {
+    dateInput.showPicker();
+  } catch (error) {
+    // カレンダーを開く命令が使えないブラウザでは、何もしない
+  }
+}
+
+// 選んだ日付を「2026年9月29日」の形で表示する
+function showSelectedDate() {
+  const date = document.getElementById("item-date").value;
+  // 「日付を選択してください」を表示している場所
+  const dateText = document.getElementById("date-text");
+
+  if (date === "") {
+    dateText.textContent = "日付を選択してください";
+    dateText.classList.remove("selected");
+  } else {
+    dateText.textContent = formatDate(date);
+    dateText.classList.add("selected");
+  }
+}
+
 // 追加ボタンが押されたときの処理
 function addItem() {
   // 入力された持ち物の名前（前後の空白は取りのぞく）
@@ -108,3 +133,8 @@ showItems();
 
 // 追加ボタンを押したら addItem を動かす
 document.getElementById("add-button").addEventListener("click", addItem);
+
+// 日付の欄を押したらカレンダーを開き、日付を選んだら表示を変える
+const dateInput = document.getElementById("item-date");
+dateInput.addEventListener("click", openCalendar);
+dateInput.addEventListener("change", showSelectedDate);
