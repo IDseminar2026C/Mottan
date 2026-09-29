@@ -53,6 +53,17 @@ function formatDate(dateText) {
   return Number(parts[0]) + "年" + Number(parts[1]) + "月" + Number(parts[2]) + "日";
 }
 
+// 過ぎた日（昨日より前）の持ち物を保存データから消す
+function removePastItems() {
+  // 今日の日付（「2026-09-29」の形）
+  const today = getTodayKey();
+  const items = loadItems();
+  // 日付が今日か、今日より後のものだけを残す
+  // （「年-月-日」の形の文字は、そのまま大きさをくらべると日付の前後がわかる）
+  const remainingItems = items.filter((item) => item.date >= today);
+  saveItems(remainingItems);
+}
+
 // 指定した番号（id）の持ち物を保存データから消して、リストを表示し直す
 function deleteItem(id) {
   const items = loadItems();
@@ -219,6 +230,7 @@ function addItem() {
 }
 
 showToday();
+removePastItems();
 showItems();
 
 // 追加ボタンを押したら addItem を動かす
