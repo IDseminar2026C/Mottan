@@ -72,8 +72,18 @@ function createDeleteButton(id) {
   return button;
 }
 
+// マウスを使う画面（パソコン）かどうかを調べる（style.css の切り替えと同じ条件）
+function isComputer() {
+  return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+}
+
 // スマホで、カードを左にスワイプしたら開き、右にスワイプしたら閉じる
 function addSwipe(card) {
+  // パソコンでは、タッチパネルがあってもスワイプしない
+  if (isComputer()) {
+    return;
+  }
+
   // 指を置いた位置
   let startX = 0;
   let startY = 0;
