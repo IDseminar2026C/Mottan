@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>今日の持ち物</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ヘッダーエリア：タイトルと今日の日付 -->
+  <header class="header">
+    <h1 class="title">今日の持ち物</h1>
+    <p id="today" class="today"></p>
+  </header>
+
+  <main class="main">
+    <!-- メイン表示エリア：今日必要なもののリスト（あとで作る） -->
+    <section class="list-area">
+      <h2 class="section-title">今日必要なもの</h2>
+      <ul id="item-list" class="item-list"></ul>
+    </section>
+
+    <!-- 入力フォームエリア：持ち物名・日付・追加ボタン（まだ動かない） -->
+    <section class="form-area">
+      <h2 class="section-title">持ち物を追加</h2>
+      <input id="item-name" class="input" type="text" placeholder="持ち物・課題の名前">
+      <input id="item-date" class="input" type="date">
+      <button id="add-button" class="add-button" type="button">追加</button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

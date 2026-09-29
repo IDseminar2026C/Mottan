@@ -1,0 +1,64 @@
+/* ページ全体 */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #f5f5f5;
+  color: #333333;
+}
+
+/* ヘッダー（タイトルと今日の日付） */
+.header {
+  padding: 16px;
+  background-color: #4a7bd0;
+  color: #ffffff;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+}
+
+.today {
+  margin: 8px 0 0;
+  font-size: 18px;
+}
+
+/* メイン部分（スマホ幅に合わせて左右に余白） */
+.main {
+  padding: 16px;
+}
+
+.section-title {
+  font-size: 18px;
+  margin: 16px 0 8px;
+}
+
+/* 持ち物リスト */
+.item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 入力フォーム */
+.input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+}
+
+.add-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #4a7bd0;
+  border: none;
+  border-radius: 8px;
+}
