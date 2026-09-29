@@ -182,3 +182,16 @@ body {
   font-size: 14px;
   color: #d03030;
 }
+
+/* 明日以降の持ち物（押すと開いたり閉じたりする場所） */
+.future-area {
+  margin-top: 16px;
+}
+
+/* 「▶ 明日以降の持ち物（○件）」の見出し（押せることがわかるように、指の形のカーソルにする） */
+.future-title {
+  padding: 12px 0;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}

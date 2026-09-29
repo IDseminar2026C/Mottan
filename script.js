@@ -121,8 +121,8 @@ function addSwipe(card) {
   });
 }
 
-// 持ち物1つぶんのカードを作る
-function createItemCard(item) {
+// 持ち物1つぶんのカードを作る（showDate が true のときは、名前の下に日付も出す）
+function createItemCard(item, showDate) {
   // カード全体
   const card = document.createElement("li");
   card.className = "item-card";
@@ -131,6 +131,14 @@ function createItemCard(item) {
   const content = document.createElement("div");
   content.className = "card-content";
   content.textContent = item.name;
+
+  if (showDate) {
+    // カードの中に出す日付
+    const dateElement = document.createElement("span");
+    dateElement.className = "item-date";
+    dateElement.textContent = formatDate(item.date);
+    content.appendChild(dateElement);
+  }
 
   card.appendChild(content);
   card.appendChild(createDeleteButton(item.id));
@@ -153,11 +161,45 @@ function showItems() {
   for (const item of items) {
     // 日付が今日と同じものだけカードにする
     if (item.date === today) {
-      listElement.appendChild(createItemCard(item));
+      listElement.appendChild(createItemCard(item, false));
       count = count + 1;
     }
   }
   showEmptyMessage(count);
+  // 明日以降の持ち物のリストも、いっしょに表示し直す
+  showFutureItems();
+}
+
+// 保存されている持ち物のうち、明日以降のものを日付の早い順に表示する
+function showFutureItems() {
+  // カードを並べる場所
+  const listElement = document.getElementById("future-list");
+  listElement.innerHTML = "";
+
+  // 今日の日付（「2026-09-29」の形）
+  const today = getTodayKey();
+  // 日付が今日より後のものだけを集める
+  const futureItems = loadItems().filter((item) => item.date > today);
+  // 日付の早い順に並べる
+  futureItems.sort((a, b) => a.date.localeCompare(b.date));
+
+  for (const item of futureItems) {
+    listElement.appendChild(createItemCard(item, true));
+  }
+  showFutureCount(futureItems.length);
+}
+
+// 見出しに件数を出し、0件のときだけ「明日以降の持ち物はありません」と表示する
+function showFutureCount(count) {
+  const titleElement = document.getElementById("future-title");
+  titleElement.textContent = "明日以降の持ち物（" + count + "件）";
+
+  const emptyElement = document.getElementById("future-empty-message");
+  if (count === 0) {
+    emptyElement.textContent = "明日以降の持ち物はありません";
+  } else {
+    emptyElement.textContent = "";
+  }
 }
 
 // 今日の持ち物が0件のときだけ「今日の準備物はありません」と表示する
