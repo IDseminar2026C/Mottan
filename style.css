@@ -71,6 +71,8 @@ body {
   padding: 12px;
   background-color: #ffffff;
   transition: transform 0.2s;
+  /* スペースのない長い英数字でも、はみ出さずに途中で折り返す */
+  overflow-wrap: anywhere;
 }
 
 /* スワイプで開いたときは、中身を左にずらして削除アイコンを見せる */
