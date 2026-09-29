@@ -53,18 +53,73 @@ function formatDate(dateText) {
   return Number(parts[0]) + "年" + Number(parts[1]) + "月" + Number(parts[2]) + "日";
 }
 
+// 指定した番号（id）の持ち物を保存データから消して、リストを表示し直す
+function deleteItem(id) {
+  const items = loadItems();
+  // 消したい持ち物以外だけを残す
+  const remainingItems = items.filter((item) => item.id !== id);
+  saveItems(remainingItems);
+  showItems();
+}
+
+// 赤いマイナスの削除アイコンを作る
+function createDeleteButton(id) {
+  const button = document.createElement("button");
+  button.className = "delete-button";
+  button.type = "button";
+  button.textContent = "−";
+  button.addEventListener("click", () => deleteItem(id));
+  return button;
+}
+
+// スマホで、カードを左にスワイプしたら開き、右にスワイプしたら閉じる
+function addSwipe(card) {
+  // 指を置いた位置
+  let startX = 0;
+  let startY = 0;
+
+  card.addEventListener("touchstart", (event) => {
+    startX = event.touches[0].clientX;
+    startY = event.touches[0].clientY;
+  });
+
+  card.addEventListener("touchend", (event) => {
+    // 指を離すまでに、横と縦にどれだけ動いたか
+    const moveX = event.changedTouches[0].clientX - startX;
+    const moveY = event.changedTouches[0].clientY - startY;
+
+    // 縦に大きく動いたときはスクロールなので、何もしない
+    if (Math.abs(moveY) > Math.abs(moveX)) {
+      return;
+    }
+    if (moveX < -40) {
+      card.classList.add("opened");
+    } else if (moveX > 40) {
+      card.classList.remove("opened");
+    }
+  });
+}
+
 // 持ち物1つぶんのカードを作る
 function createItemCard(item) {
   // カード全体
   const card = document.createElement("li");
   card.className = "item-card";
-  card.textContent = item.name;
+
+  // 名前と日付をまとめた部分（スワイプすると左にずれる）
+  const content = document.createElement("div");
+  content.className = "card-content";
+  content.textContent = item.name;
 
   // カードの中に出す日付
   const dateElement = document.createElement("span");
   dateElement.className = "item-date";
   dateElement.textContent = formatDate(item.date);
-  card.appendChild(dateElement);
+  content.appendChild(dateElement);
+
+  card.appendChild(content);
+  card.appendChild(createDeleteButton(item.id));
+  addSwipe(card);
 
   return card;
 }

@@ -41,13 +41,61 @@ body {
   margin: 0;
 }
 
-/* 持ち物カード1枚ぶん */
+/* 持ち物カード1枚ぶん（はみ出した部分は見えないようにする） */
 .item-card {
-  padding: 12px;
+  position: relative;
+  overflow: hidden;
   margin-bottom: 8px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 名前と日付の部分（削除アイコンの上に重ねて、ふだんはアイコンを隠す） */
+.card-content {
+  position: relative;
+  z-index: 1;
+  padding: 12px;
+  background-color: #ffffff;
+  transition: transform 0.2s;
+}
+
+/* スワイプで開いたときは、中身を左にずらして削除アイコンを見せる */
+.item-card.opened .card-content {
+  transform: translateX(-60px);
+}
+
+/* 赤い丸のマイナスアイコン（カードの右側） */
+.delete-button {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: 24px;
+  line-height: 36px;
+  color: #ffffff;
+  background-color: #d03030;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* パソコン（マウスを使う画面）では、小さめのアイコンをいつも表示する */
+@media (hover: hover) and (pointer: fine) {
+  .card-content {
+    padding-right: 48px;
+  }
+
+  .delete-button {
+    z-index: 2;
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+    line-height: 24px;
+  }
 }
 
 /* カードの中の日付（小さめ・うすい色） */
