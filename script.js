@@ -336,14 +336,14 @@ function setMode(mode) {
   // 曜日のボタンの欄（「日付で登録」のときは隠す）
   const weekdayArea = document.getElementById("weekday-area");
 
-  // 選んでいるほうのボタンだけ青くする
+  //
   dateButton.classList.toggle("selected", mode === "date");
   weekdayButton.classList.toggle("selected", mode === "weekday");
   dateArea.hidden = mode === "weekday";
   weekdayArea.hidden = mode === "date";
 }
 
-// 曜日のボタンを押したら、選ぶ（青）と選ばない（白）を切り替える
+// 
 function toggleWeekday(event) {
   event.currentTarget.classList.toggle("selected");
 }

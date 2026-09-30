@@ -2,15 +2,15 @@
 body {
   margin: 0;
   font-family: sans-serif;
-  background-color: #f5f5f5;
+  background-color: #fff8e1;
   color: #333333;
 }
 
-/* ヘッダー（タイトルと今日の日付） */
+/* ヘッダー（タイトルと今日の日付）：明るい黄色に、読みやすい濃い茶色の文字 */
 .header {
   padding: 16px;
-  background-color: #4a7bd0;
-  color: #ffffff;
+  background-color: #ffd23f;
+  color: #4a2c00;
   text-align: center;
 }
 
@@ -60,7 +60,7 @@ body {
   overflow: hidden;
   margin-bottom: 8px;
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -130,7 +130,7 @@ body {
   margin-bottom: 8px;
   font-size: 16px;
   border: 1px solid #cccccc;
-  border-radius: 8px;
+  border-radius: 16px;
 }
 
 /* 日付の欄（表示と見えない日付の欄を重ねるための入れ物） */
@@ -178,17 +178,17 @@ body {
   flex: 1;
   padding: 10px;
   font-size: 15px;
-  color: #4a7bd0;
+  color: #4a2c00;
   background-color: #ffffff;
-  border: 1px solid #4a7bd0;
-  border-radius: 8px;
+  border: 1px solid #f28c28;
+  border-radius: 16px;
   cursor: pointer;
 }
 
-/* 選んでいるほうのボタンは青 */
+/* 選んでいるほうのボタンはオレンジ */
 .mode-button.selected {
-  color: #ffffff;
-  background-color: #4a7bd0;
+  color: #4a2c00;
+  background-color: #f28c28;
 }
 
 /* 曜日のボタン（月〜日の7つを横にならべる） */
@@ -208,27 +208,27 @@ body {
   flex: 1;
   padding: 10px 0;
   font-size: 15px;
-  color: #4a7bd0;
+  color: #4a2c00;
   background-color: #ffffff;
-  border: 1px solid #4a7bd0;
-  border-radius: 8px;
+  border: 1px solid #f28c28;
+  border-radius: 16px;
   cursor: pointer;
 }
 
-/* 選んだ曜日は青 */
+/* 選んだ曜日はオレンジ */
 .weekday-button.selected {
-  color: #ffffff;
-  background-color: #4a7bd0;
+  color: #4a2c00;
+  background-color: #f28c28;
 }
 
 .add-button {
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  color: #ffffff;
-  background-color: #4a7bd0;
+  color: #4a2c00;
+  background-color: #f28c28;
   border: none;
-  border-radius: 8px;
+  border-radius: 16px;
 }
 
 /* 入力が足りないときの注意（赤い文字） */
