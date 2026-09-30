@@ -166,21 +166,29 @@ body {
   cursor: pointer;
 }
 
-/* 「毎週くりかえす」のチェック欄（四角と文字を横にならべる） */
-.repeat-area {
+/* 「日付で登録」「曜日でくりかえす」の切り替えボタン（2つを横にならべる） */
+.mode-area {
   display: flex;
-  align-items: center;
   gap: 8px;
   margin-bottom: 8px;
-  font-size: 16px;
+}
+
+/* 切り替えボタン1つぶん（選んでいないときは白） */
+.mode-button {
+  flex: 1;
+  padding: 10px;
+  font-size: 15px;
+  color: #4a7bd0;
+  background-color: #ffffff;
+  border: 1px solid #4a7bd0;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-/* チェックの四角（指で押しやすいように少し大きくする） */
-.repeat-input {
-  width: 20px;
-  height: 20px;
-  margin: 0;
+/* 選んでいるほうのボタンは青 */
+.mode-button.selected {
+  color: #ffffff;
+  background-color: #4a7bd0;
 }
 
 .add-button {

@@ -278,6 +278,19 @@ function showSelectedDate() {
   }
 }
 
+// 「日付で登録」か「曜日でくりかえす」かを切り替える（mode は "date" か "weekday"）
+function setMode(mode) {
+  const dateButton = document.getElementById("mode-date");
+  const weekdayButton = document.getElementById("mode-weekday");
+  // 日付の欄（「曜日でくりかえす」のときは隠す）
+  const dateArea = document.getElementById("date-area");
+
+  // 選んでいるほうのボタンだけ青くする
+  dateButton.classList.toggle("selected", mode === "date");
+  weekdayButton.classList.toggle("selected", mode === "weekday");
+  dateArea.hidden = mode === "weekday";
+}
+
 // 追加ボタンが押されたときの処理
 function addItem() {
   // 入力された持ち物の名前（前後の空白は取りのぞく）
@@ -285,9 +298,6 @@ function addItem() {
   const name = nameInput.value.trim();
   // 選ばれた日付（「2026-09-29」の形）
   const date = document.getElementById("item-date").value;
-  // 「毎週くりかえす」のチェック欄（チェックが入っていれば true）
-  const repeatInput = document.getElementById("item-repeat");
-  const repeat = repeatInput.checked;
 
   if (name === "") {
     showError("持ち物・課題の名前を入力してください");
@@ -301,8 +311,7 @@ function addItem() {
   }
 
   // 新しい持ち物（id は、あとで削除するときに見分けるための番号）
-  // repeat が true のものは「毎週」の持ち物
-  const newItem = { id: Date.now(), name: name, date: date, repeat: repeat };
+  const newItem = { id: Date.now(), name: name, date: date };
   const items = loadItems();
   items.push(newItem);
   saveItems(items);
@@ -311,8 +320,6 @@ function addItem() {
   // 例：「2026年10月3日に「教科書」を追加しました」
   showSuccess(formatDate(date) + "に「" + name + "」を追加しました");
   nameInput.value = "";
-  // 次の持ち物がまちがって「毎週」にならないように、チェックを外しておく
-  repeatInput.checked = false;
   // 過去の日付で追加されたときのために、日付を進める・消す処理をここでも動かす
   removePastItems();
   showItems();
@@ -329,3 +336,7 @@ document.getElementById("add-button").addEventListener("click", addItem);
 const dateInput = document.getElementById("item-date");
 dateInput.addEventListener("click", openCalendar);
 dateInput.addEventListener("change", showSelectedDate);
+
+// 切り替えボタンを押したら、日付の欄を出したり隠したりする
+document.getElementById("mode-date").addEventListener("click", () => setMode("date"));
+document.getElementById("mode-weekday").addEventListener("click", () => setMode("weekday"));
