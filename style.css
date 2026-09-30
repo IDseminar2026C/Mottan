@@ -200,6 +200,13 @@ body {
   color: #d03030;
 }
 
+/* 追加できたときのお知らせ（緑の文字） */
+.success-message {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #2e8b57;
+}
+
 /* 明日以降の持ち物（押すと開いたり閉じたりする場所） */
 .future-area {
   margin-top: 16px;

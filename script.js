@@ -247,6 +247,12 @@ function showError(message) {
   errorElement.textContent = message;
 }
 
+// 追加できたときのお知らせを表示する（空の文字を渡すとお知らせが消える）
+function showSuccess(message) {
+  const successElement = document.getElementById("success-message");
+  successElement.textContent = message;
+}
+
 // 日付の欄を押したら、カレンダーを開く（パソコンのブラウザ用）
 function openCalendar() {
   const dateInput = document.getElementById("item-date");
@@ -285,10 +291,12 @@ function addItem() {
 
   if (name === "") {
     showError("持ち物・課題の名前を入力してください");
+    showSuccess("");
     return;
   }
   if (date === "") {
     showError("日付を選んでください");
+    showSuccess("");
     return;
   }
 
@@ -300,6 +308,8 @@ function addItem() {
   saveItems(items);
 
   showError("");
+  // 例：「2026年10月3日に「教科書」を追加しました」
+  showSuccess(formatDate(date) + "に「" + name + "」を追加しました");
   nameInput.value = "";
   // 次の持ち物がまちがって「毎週」にならないように、チェックを外しておく
   repeatInput.checked = false;
