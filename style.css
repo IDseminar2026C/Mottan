@@ -108,7 +108,7 @@ body {
   transform: translateX(60px);
 }
 
-/* 黄色い丸の星アイコン（カードの左側） */
+/* 青い丸の星アイコン（カードの左側） */
 .star-button {
   position: absolute;
   top: 50%;
@@ -120,16 +120,16 @@ body {
   font-size: 22px;
   line-height: 36px;
   color: #ffffff;
-  background-color: #f0b400;
+  background-color: #0066ff;
   border: none;
   border-radius: 50%;
   cursor: pointer;
 }
 
-/* 星がついた持ち物の、名前の前の★ */
+/* 星がついた持ち物の、名前の前の★（星ボタンと同じ青） */
 .star-mark {
   margin-right: 4px;
-  color: #f0b400;
+  color: #0066ff;
 }
 
 /* 赤い丸のマイナスアイコン（カードの右側） */
