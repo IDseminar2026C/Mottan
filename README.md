@@ -6,14 +6,8 @@
 **公開URL：** https://mottan-vn1i.vercel.app/
 
 `<スクリーンショットをここに貼る>`
+![アプリの画面](screenshot.png)
 
-<!--
-スクリーンショットの貼り方：
-1. アプリの画面をスクリーンショットで撮る（Windows: Win+Shift+S / Mac: Cmd+Shift+4）
-2. 画像ファイルをこのフォルダの screenshot.png という名前で保存する
-3. 下の行の <!-- --> を外す
--->
-<!-- ![アプリの画面](screenshot.png) -->
 
 ---
 
