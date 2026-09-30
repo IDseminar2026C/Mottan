@@ -73,6 +73,34 @@ function moveToTodayOrLater(dateText, today) {
   return date;
 }
 
+// 曜日の名前（番号の順：日曜が 0、月曜が 1 … 土曜が 6）
+const WEEKDAY_NAMES = ["日", "月", "火", "水", "木", "金", "土"];
+
+// 「曜日でくりかえす」で追加した持ち物かどうか（曜日の一覧を持っていれば true）
+function isWeekdayItem(item) {
+  return Array.isArray(item.weekdays);
+}
+
+// 日本時間の今日の曜日の番号を返す（日曜が 0、月曜が 1 … 土曜が 6）
+function getTodayWeekday() {
+  const parts = getTodayKey().split("-");
+  const today = new Date(Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])));
+  return today.getUTCDay();
+}
+
+// 曜日の番号の一覧を「月・木」の形の文字にする（月曜から日曜の順に並べる）
+function formatWeekdays(weekdays) {
+  // 月曜を先頭にした並び順
+  const order = [1, 2, 3, 4, 5, 6, 0];
+  const names = [];
+  for (const day of order) {
+    if (weekdays.includes(day)) {
+      names.push(WEEKDAY_NAMES[day]);
+    }
+  }
+  return names.join("・");
+}
+
 // 過ぎた日（昨日より前）の持ち物を保存データから消す
 // ただし「毎週」の持ち物は消さずに、今日以降になるまで日付を進める
 function removePastItems() {
@@ -87,9 +115,9 @@ function removePastItems() {
     }
   }
 
-  // 日付が今日か、今日より後のものだけを残す
+  // 曜日の持ち物と、日付が今日か今日より後のものだけを残す
   // （「年-月-日」の形の文字は、そのまま大きさをくらべると日付の前後がわかる）
-  const remainingItems = items.filter((item) => item.date >= today);
+  const remainingItems = items.filter((item) => isWeekdayItem(item) || item.date >= today);
   saveItems(remainingItems);
 }
 
@@ -162,10 +190,14 @@ function createItemCard(item, showDate) {
   content.textContent = item.name;
 
   if (showDate) {
-    // カードの中に出す日付
+    // カードの中に出す日付（曜日の持ち物は「毎週 月・木」の形）
     const dateElement = document.createElement("span");
     dateElement.className = "item-date";
-    dateElement.textContent = formatDate(item.date);
+    if (isWeekdayItem(item)) {
+      dateElement.textContent = "毎週 " + formatWeekdays(item.weekdays);
+    } else {
+      dateElement.textContent = formatDate(item.date);
+    }
     content.appendChild(dateElement);
   }
 
@@ -176,20 +208,29 @@ function createItemCard(item, showDate) {
   return card;
 }
 
-// 保存されている持ち物のうち、今日の日付のものだけをリストに表示する
+// 今日の持ち物かどうか（日付が今日か、曜日の持ち物で今日の曜日が選ばれていれば true）
+function isTodayItem(item, today, todayWeekday) {
+  if (isWeekdayItem(item)) {
+    return item.weekdays.includes(todayWeekday);
+  }
+  return item.date === today;
+}
+
+// 保存されている持ち物のうち、今日の分だけをリストに表示する
 function showItems() {
   // カードを並べる場所
   const listElement = document.getElementById("item-list");
   listElement.innerHTML = "";
 
-  // 今日の日付（「2026-09-29」の形）
+  // 今日の日付（「2026-09-29」の形）と、今日の曜日の番号
   const today = getTodayKey();
+  const todayWeekday = getTodayWeekday();
   const items = loadItems();
   // 作ったカードの枚数
   let count = 0;
   for (const item of items) {
-    // 日付が今日と同じものだけカードにする
-    if (item.date === today) {
+    // 今日の分だけカードにする
+    if (isTodayItem(item, today, todayWeekday)) {
       listElement.appendChild(createItemCard(item, false));
       count = count + 1;
     }
@@ -200,6 +241,7 @@ function showItems() {
 }
 
 // 保存されている持ち物のうち、明日以降のものを日付の早い順に表示する
+// 曜日の持ち物は、日付の持ち物の下にまとめて表示する
 function showFutureItems() {
   // カードを並べる場所
   const listElement = document.getElementById("future-list");
@@ -207,15 +249,18 @@ function showFutureItems() {
 
   // 今日の日付（「2026-09-29」の形）
   const today = getTodayKey();
-  // 日付が今日より後のものだけを集める
-  const futureItems = loadItems().filter((item) => item.date > today);
+  const items = loadItems();
+  // 日付の持ち物のうち、日付が今日より後のものだけを集める
+  const futureItems = items.filter((item) => !isWeekdayItem(item) && item.date > today);
   // 日付の早い順に並べる
   futureItems.sort((a, b) => a.date.localeCompare(b.date));
+  // 曜日の持ち物（毎週くりかえすので、いつも表示する）
+  const weekdayItems = items.filter((item) => isWeekdayItem(item));
 
-  for (const item of futureItems) {
+  for (const item of futureItems.concat(weekdayItems)) {
     listElement.appendChild(createItemCard(item, true));
   }
-  showFutureCount(futureItems.length);
+  showFutureCount(futureItems.length + weekdayItems.length);
 }
 
 // 見出しに件数を出し、0件のときだけ「明日以降の持ち物はありません」と表示する
@@ -278,17 +323,82 @@ function showSelectedDate() {
   }
 }
 
+// 今えらんでいる登録のしかた（"date" は日付で登録、"weekday" は曜日でくりかえす）
+let currentMode = "date";
+
 // 「日付で登録」か「曜日でくりかえす」かを切り替える（mode は "date" か "weekday"）
 function setMode(mode) {
+  currentMode = mode;
   const dateButton = document.getElementById("mode-date");
   const weekdayButton = document.getElementById("mode-weekday");
   // 日付の欄（「曜日でくりかえす」のときは隠す）
   const dateArea = document.getElementById("date-area");
+  // 曜日のボタンの欄（「日付で登録」のときは隠す）
+  const weekdayArea = document.getElementById("weekday-area");
 
   // 選んでいるほうのボタンだけ青くする
   dateButton.classList.toggle("selected", mode === "date");
   weekdayButton.classList.toggle("selected", mode === "weekday");
   dateArea.hidden = mode === "weekday";
+  weekdayArea.hidden = mode === "date";
+}
+
+// 曜日のボタンを押したら、選ぶ（青）と選ばない（白）を切り替える
+function toggleWeekday(event) {
+  event.currentTarget.classList.toggle("selected");
+}
+
+// 選んでいる曜日の番号の一覧を返す（例：月と木なら [1, 4]）
+function getSelectedWeekdays() {
+  const selectedButtons = document.querySelectorAll(".weekday-button.selected");
+  const weekdays = [];
+  for (const button of selectedButtons) {
+    weekdays.push(Number(button.dataset.day));
+  }
+  return weekdays;
+}
+
+// 曜日のボタンを、全部「選ばない（白）」にもどす
+function clearWeekdays() {
+  const buttons = document.querySelectorAll(".weekday-button");
+  for (const button of buttons) {
+    button.classList.remove("selected");
+  }
+}
+
+// 新しい持ち物を保存データに加える
+function saveNewItem(newItem) {
+  const items = loadItems();
+  items.push(newItem);
+  saveItems(items);
+}
+
+// 日付の持ち物を保存する（うまくいったらお知らせの文、足りないときは空の文字を返す）
+function addDateItem(name) {
+  // 選ばれた日付（「2026-09-29」の形）
+  const date = document.getElementById("item-date").value;
+  if (date === "") {
+    showError("日付を選んでください");
+    return "";
+  }
+  // id は、あとで削除するときに見分けるための番号
+  saveNewItem({ id: Date.now(), name: name, date: date });
+  // 例：「2026年10月3日に「教科書」を追加しました」
+  return formatDate(date) + "に「" + name + "」を追加しました";
+}
+
+// 曜日の持ち物を保存する（うまくいったらお知らせの文、足りないときは空の文字を返す）
+function addWeekdayItem(name) {
+  const weekdays = getSelectedWeekdays();
+  if (weekdays.length === 0) {
+    showError("曜日を選んでください");
+    return "";
+  }
+  // 曜日の持ち物は日付を持たず、曜日の一覧（weekdays）を持つ
+  saveNewItem({ id: Date.now(), name: name, weekdays: weekdays });
+  clearWeekdays();
+  // 例：「毎週月・木曜日に「体操服」を追加しました」
+  return "毎週" + formatWeekdays(weekdays) + "曜日に「" + name + "」を追加しました";
 }
 
 // 追加ボタンが押されたときの処理
@@ -296,29 +406,28 @@ function addItem() {
   // 入力された持ち物の名前（前後の空白は取りのぞく）
   const nameInput = document.getElementById("item-name");
   const name = nameInput.value.trim();
-  // 選ばれた日付（「2026-09-29」の形）
-  const date = document.getElementById("item-date").value;
 
   if (name === "") {
     showError("持ち物・課題の名前を入力してください");
     showSuccess("");
     return;
   }
-  if (date === "") {
-    showError("日付を選んでください");
+
+  // 今の登録のしかたに合わせて保存する
+  let message = "";
+  if (currentMode === "weekday") {
+    message = addWeekdayItem(name);
+  } else {
+    message = addDateItem(name);
+  }
+  // 日付や曜日が足りなかったときは、ここで終わり
+  if (message === "") {
     showSuccess("");
     return;
   }
 
-  // 新しい持ち物（id は、あとで削除するときに見分けるための番号）
-  const newItem = { id: Date.now(), name: name, date: date };
-  const items = loadItems();
-  items.push(newItem);
-  saveItems(items);
-
   showError("");
-  // 例：「2026年10月3日に「教科書」を追加しました」
-  showSuccess(formatDate(date) + "に「" + name + "」を追加しました");
+  showSuccess(message);
   nameInput.value = "";
   // 過去の日付で追加されたときのために、日付を進める・消す処理をここでも動かす
   removePastItems();
@@ -340,3 +449,8 @@ dateInput.addEventListener("change", showSelectedDate);
 // 切り替えボタンを押したら、日付の欄を出したり隠したりする
 document.getElementById("mode-date").addEventListener("click", () => setMode("date"));
 document.getElementById("mode-weekday").addEventListener("click", () => setMode("weekday"));
+
+// 曜日のボタンを押したら、選ぶ・選ばないを切り替える
+for (const button of document.querySelectorAll(".weekday-button")) {
+  button.addEventListener("click", toggleWeekday);
+}

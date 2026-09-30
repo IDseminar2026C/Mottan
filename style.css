@@ -191,6 +191,36 @@ body {
   background-color: #4a7bd0;
 }
 
+/* 曜日のボタン（月〜日の7つを横にならべる） */
+.weekday-area {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+/* 隠しているときは、ならべる設定より「隠す」を優先する */
+.weekday-area[hidden] {
+  display: none;
+}
+
+/* 曜日のボタン1つぶん（選んでいないときは白） */
+.weekday-button {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 15px;
+  color: #4a7bd0;
+  background-color: #ffffff;
+  border: 1px solid #4a7bd0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 選んだ曜日は青 */
+.weekday-button.selected {
+  color: #ffffff;
+  background-color: #4a7bd0;
+}
+
 .add-button {
   width: 100%;
   padding: 12px;
