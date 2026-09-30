@@ -180,7 +180,7 @@ body {
   font-size: 15px;
   color: #4a2c00;
   background-color: #ffffff;
-  border: 1px solid #f28c28;
+  border: 1px solid #FFB300;
   border-radius: 16px;
   cursor: pointer;
 }
@@ -188,7 +188,7 @@ body {
 /* 選んでいるほうのボタンはオレンジ */
 .mode-button.selected {
   color: #4a2c00;
-  background-color: #f28c28;
+  background-color: #FFB300;
 }
 
 /* 曜日のボタン（月〜日の7つを横にならべる） */
@@ -210,7 +210,7 @@ body {
   font-size: 15px;
   color: #4a2c00;
   background-color: #ffffff;
-  border: 1px solid #f28c28;
+  border: 1px solid #FFB300;
   border-radius: 16px;
   cursor: pointer;
 }
@@ -218,7 +218,7 @@ body {
 /* 選んだ曜日はオレンジ */
 .weekday-button.selected {
   color: #4a2c00;
-  background-color: #f28c28;
+  background-color: #FFB300;
 }
 
 .add-button {
@@ -226,7 +226,7 @@ body {
   padding: 12px;
   font-size: 16px;
   color: #4a2c00;
-  background-color: #f28c28;
+  background-color: #FFB300;
   border: none;
   border-radius: 16px;
 }
