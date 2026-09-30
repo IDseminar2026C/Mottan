@@ -54,6 +54,29 @@ body {
   display: none;
 }
 
+/* カードの操作の説明（小さめ・うすい色） */
+.swipe-hint {
+  margin: 8px 0;
+  font-size: 13px;
+  color: #999999;
+}
+
+/* スマホでは、パソコン用の説明を隠す */
+.computer-only {
+  display: none;
+}
+
+/* パソコンでは、スマホ用の説明を隠して、パソコン用の説明を出す */
+@media (hover: hover) and (pointer: fine) {
+  .phone-only {
+    display: none;
+  }
+
+  .computer-only {
+    display: block;
+  }
+}
+
 /* 持ち物カード1枚ぶん（はみ出した部分は見えないようにする） */
 .item-card {
   position: relative;
@@ -80,6 +103,35 @@ body {
   transform: translateX(-60px);
 }
 
+/* 右にスワイプしたときは、中身を右にずらして星のアイコンを見せる */
+.item-card.star-opened .card-content {
+  transform: translateX(60px);
+}
+
+/* 黄色い丸の星アイコン（カードの左側） */
+.star-button {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: 22px;
+  line-height: 36px;
+  color: #ffffff;
+  background-color: #f0b400;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* 星がついた持ち物の、名前の前の★ */
+.star-mark {
+  margin-right: 4px;
+  color: #f0b400;
+}
+
 /* 赤い丸のマイナスアイコン（カードの右側） */
 .delete-button {
   position: absolute;
@@ -102,6 +154,15 @@ body {
 @media (hover: hover) and (pointer: fine) {
   .card-content {
     padding-right: 48px;
+    padding-left: 48px;
+  }
+
+  .star-button {
+    z-index: 2;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    line-height: 24px;
   }
 
   .delete-button {

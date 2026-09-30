@@ -16,6 +16,9 @@
   <main class="main">
     <!-- メイン表示エリア：今日必要なもののリスト（あとで作る） -->
     <section class="list-area">
+      <!-- カードの操作の説明（スマホ用とパソコン用。style.css でどちらか片方だけ出す） -->
+      <p class="swipe-hint phone-only">カードを左にスワイプで削除できます。<br>右にスワイプで重要なものを上に表示できます。</p>
+      <p class="swipe-hint computer-only">−で削除できます。<br>☆で重要なものを上に表示できます。</p>
       <!-- 今日の持ち物がないときだけ、ここに文字が出る -->
       <p id="empty-message" class="empty-message"></p>
       <ul id="item-list" class="item-list"></ul>

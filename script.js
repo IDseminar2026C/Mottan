@@ -140,12 +140,43 @@ function createDeleteButton(id) {
   return button;
 }
 
+// 指定した番号（id）の持ち物の星を、つける・外すを切り替えて、リストを表示し直す
+function toggleStar(id) {
+  const items = loadItems();
+  for (const item of items) {
+    if (item.id === id) {
+      // starred が true のものは「重要（星つき）」の持ち物
+      item.starred = !item.starred;
+    }
+  }
+  saveItems(items);
+  showItems();
+}
+
+// 黄色い星のアイコンを作る（星がついていれば★、ついていなければ☆）
+function createStarButton(item) {
+  const button = document.createElement("button");
+  button.className = "star-button";
+  button.type = "button";
+  button.textContent = item.starred ? "★" : "☆";
+  button.addEventListener("click", () => toggleStar(item.id));
+  return button;
+}
+
+// 星つきの持ち物を前に、星なしの持ち物を後ろにした一覧を返す（それぞれの中の順番は変えない）
+function sortByStar(items) {
+  const starredItems = items.filter((item) => item.starred === true);
+  const otherItems = items.filter((item) => item.starred !== true);
+  return starredItems.concat(otherItems);
+}
+
 // マウスを使う画面（パソコン）かどうかを調べる（style.css の切り替えと同じ条件）
 function isComputer() {
   return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 }
 
-// スマホで、カードを左にスワイプしたら開き、右にスワイプしたら閉じる
+// スマホで、カードを左にスワイプしたら削除アイコン、右にスワイプしたら星アイコンを出す
+// （反対向きにスワイプすると閉じる）
 function addSwipe(card) {
   // パソコンでは、タッチパネルがあってもスワイプしない
   if (isComputer()) {
@@ -171,11 +202,29 @@ function addSwipe(card) {
       return;
     }
     if (moveX < -40) {
-      card.classList.add("opened");
+      swipeLeft(card);
     } else if (moveX > 40) {
-      card.classList.remove("opened");
+      swipeRight(card);
     }
   });
+}
+
+// 左にスワイプしたとき：星アイコンが出ていれば閉じる、出ていなければ削除アイコンを出す
+function swipeLeft(card) {
+  if (card.classList.contains("star-opened")) {
+    card.classList.remove("star-opened");
+  } else {
+    card.classList.add("opened");
+  }
+}
+
+// 右にスワイプしたとき：削除アイコンが出ていれば閉じる、出ていなければ星アイコンを出す
+function swipeRight(card) {
+  if (card.classList.contains("opened")) {
+    card.classList.remove("opened");
+  } else {
+    card.classList.add("star-opened");
+  }
 }
 
 // 持ち物1つぶんのカードを作る（showDate が true のときは、名前の下に日付も出す）
@@ -187,7 +236,15 @@ function createItemCard(item, showDate) {
   // 名前と日付をまとめた部分（スワイプすると左にずれる）
   const content = document.createElement("div");
   content.className = "card-content";
-  content.textContent = item.name;
+
+  // 星がついていれば、名前の前に黄色い★を出す
+  if (item.starred === true) {
+    const starMark = document.createElement("span");
+    starMark.className = "star-mark";
+    starMark.textContent = "★";
+    content.appendChild(starMark);
+  }
+  content.appendChild(document.createTextNode(item.name));
 
   if (showDate) {
     // カードの中に出す日付（曜日の持ち物は「毎週 月・木」の形）
@@ -202,6 +259,7 @@ function createItemCard(item, showDate) {
   }
 
   card.appendChild(content);
+  card.appendChild(createStarButton(item));
   card.appendChild(createDeleteButton(item.id));
   addSwipe(card);
 
@@ -228,7 +286,8 @@ function showItems() {
   const items = loadItems();
   // 作ったカードの枚数
   let count = 0;
-  for (const item of items) {
+  // 星つきのものを上にして並べる
+  for (const item of sortByStar(items)) {
     // 今日の分だけカードにする
     if (isTodayItem(item, today, todayWeekday)) {
       listElement.appendChild(createItemCard(item, false));
@@ -257,7 +316,8 @@ function showFutureItems() {
   // 曜日の持ち物（毎週くりかえすので、いつも表示する）
   const weekdayItems = items.filter((item) => isWeekdayItem(item));
 
-  for (const item of futureItems.concat(weekdayItems)) {
+  // 星つきのものを上にして並べる
+  for (const item of sortByStar(futureItems.concat(weekdayItems))) {
     listElement.appendChild(createItemCard(item, true));
   }
   showFutureCount(futureItems.length + weekdayItems.length);
