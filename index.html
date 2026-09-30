@@ -26,34 +26,38 @@
 
     <!-- 入力フォームエリア：持ち物名・日付・追加ボタン（まだ動かない） -->
     <section class="form-area">
-      <h2 class="section-title">持ち物を追加</h2>
-      <input id="item-name" class="input" type="text" placeholder="持ち物・課題の名前">
-      <!-- 「日付で登録」か「曜日でくりかえす」かを選ぶ切り替えボタン -->
-      <div class="mode-area">
-        <button id="mode-date" class="mode-button selected" type="button">日付で登録</button>
-        <button id="mode-weekday" class="mode-button" type="button">曜日でくりかえす</button>
-      </div>
-      <!-- 日付の欄：「日付を選択してください」の表示の上に、見えない日付の欄を重ねている -->
-      <div id="date-area" class="date-area">
-        <span id="date-text" class="input date-text">日付を選択してください</span>
-        <input id="item-date" class="date-input" type="date">
-      </div>
-      <!-- 曜日のボタン：「曜日でくりかえす」のときだけ出る（いくつでも選べる） -->
-      <!-- data-day は曜日の番号（日曜が 0、月曜が 1 … 土曜が 6） -->
-      <div id="weekday-area" class="weekday-area" hidden>
-        <button class="weekday-button" type="button" data-day="1">月</button>
-        <button class="weekday-button" type="button" data-day="2">火</button>
-        <button class="weekday-button" type="button" data-day="3">水</button>
-        <button class="weekday-button" type="button" data-day="4">木</button>
-        <button class="weekday-button" type="button" data-day="5">金</button>
-        <button class="weekday-button" type="button" data-day="6">土</button>
-        <button class="weekday-button" type="button" data-day="0">日</button>
-      </div>
-      <button id="add-button" class="add-button" type="button">追加</button>
-      <!-- 入力が足りないときの注意を表示する場所 -->
-      <p id="error-message" class="error-message"></p>
-      <!-- 追加できたときに「〇年〇月〇日に「〇〇」を追加しました」を表示する場所 -->
-      <p id="success-message" class="success-message"></p>
+      <!-- 入力フォーム：最初は閉じていて、ボタンを押すと開く（もう一度押すと閉じる） -->
+      <!-- 「＋」「－」の記号は style.css でつけている -->
+      <details class="add-form">
+        <summary class="add-form-title">持ち物を追加</summary>
+        <input id="item-name" class="input" type="text" placeholder="持ち物・課題の名前">
+        <!-- 「日付で登録」か「曜日でくりかえす」かを選ぶ切り替えボタン -->
+        <div class="mode-area">
+          <button id="mode-date" class="mode-button selected" type="button">日付で登録</button>
+          <button id="mode-weekday" class="mode-button" type="button">曜日でくりかえす</button>
+        </div>
+        <!-- 日付の欄：「日付を選択してください」の表示の上に、見えない日付の欄を重ねている -->
+        <div id="date-area" class="date-area">
+          <span id="date-text" class="input date-text">日付を選択してください</span>
+          <input id="item-date" class="date-input" type="date">
+        </div>
+        <!-- 曜日のボタン：「曜日でくりかえす」のときだけ出る（いくつでも選べる） -->
+        <!-- data-day は曜日の番号（日曜が 0、月曜が 1 … 土曜が 6） -->
+        <div id="weekday-area" class="weekday-area" hidden>
+          <button class="weekday-button" type="button" data-day="1">月</button>
+          <button class="weekday-button" type="button" data-day="2">火</button>
+          <button class="weekday-button" type="button" data-day="3">水</button>
+          <button class="weekday-button" type="button" data-day="4">木</button>
+          <button class="weekday-button" type="button" data-day="5">金</button>
+          <button class="weekday-button" type="button" data-day="6">土</button>
+          <button class="weekday-button" type="button" data-day="0">日</button>
+        </div>
+        <button id="add-button" class="add-button" type="button">追加</button>
+        <!-- 入力が足りないときの注意を表示する場所 -->
+        <p id="error-message" class="error-message"></p>
+        <!-- 追加できたときに「〇年〇月〇日に「〇〇」を追加しました」を表示する場所 -->
+        <p id="success-message" class="success-message"></p>
+      </details>
 
       <!-- 明日以降の持ち物：見出しを押すと、下にリストが開く（もう一度押すと閉じる） -->
       <details class="future-area">

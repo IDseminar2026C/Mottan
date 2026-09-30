@@ -292,6 +292,45 @@ body {
   border-radius: 16px;
 }
 
+/* 入力フォームの入れ物（上に少しすきまをあける） */
+.add-form {
+  margin-top: 16px;
+}
+
+/* 「＋ 持ち物を追加」ボタン（追加ボタンと見分けるため、白地にオレンジの枠） */
+.add-form-title {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: #4a2c00;
+  background-color: #ffffff;
+  border: 2px solid #f28c28;
+  border-radius: 16px;
+  cursor: pointer;
+  /* ブラウザが自動でつける「▶」の印を消す */
+  list-style: none;
+}
+
+/* 「▶」の印を消す（Safari など用） */
+.add-form-title::-webkit-details-marker {
+  display: none;
+}
+
+/* 閉じているときは、文字の前に「＋」を出す */
+.add-form-title::before {
+  content: "＋ ";
+}
+
+/* 開いているときは、「＋」のかわりに「－」を出し、下の入力欄とのすきまをあける */
+.add-form[open] .add-form-title {
+  margin-bottom: 8px;
+}
+
+.add-form[open] .add-form-title::before {
+  content: "－ ";
+}
+
 /* 入力が足りないときの注意（赤い文字） */
 .error-message {
   margin: 8px 0 0;
