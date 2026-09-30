@@ -24,6 +24,46 @@ body {
   font-size: 18px;
 }
 
+/* おばちゃんエリア（左におばちゃん、右に吹き出しを横にならべる） */
+.obachan-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 0;
+}
+
+/* おばちゃんの絵文字（大きめ。幅がせまくても小さくならないようにする） */
+.obachan-icon {
+  flex-shrink: 0;
+  font-size: 40px;
+}
+
+/* 吹き出し（白い背景・まるい角・うすい影） */
+.obachan-message {
+  position: relative;
+  flex: 1;
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #4a2c00;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 吹き出しのしっぽ（おばちゃんの方を向いた白い三角） */
+.obachan-message::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -8px;
+  transform: translateY(-50%);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid #ffffff;
+}
+
 /* メイン部分（スマホ幅に合わせて左右に余白） */
 .main {
   padding: 16px;

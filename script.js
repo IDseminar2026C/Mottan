@@ -30,6 +30,26 @@ function showToday() {
   todayElement.textContent = getTodayText();
 }
 
+// おばちゃんのセリフの一覧
+const OBACHAN_MESSAGES = [
+  "スマホの充電器持ったか〜？",
+  "学生証忘れたら大学入れへんで！",
+  "ポケットにあめちゃん入れた？",
+  "折りたたみ傘、バッグに入れた？",
+  "鍵と財布とハンカチ持った？",
+  "教科書忘れたら隣に見せてもらい！",
+  "イヤホンないと電車で暇やで〜！",
+  "ハンカチとティッシュ持った？",
+];
+
+// おばちゃんのセリフを、一覧の中からランダムに1つ選んで吹き出しに表示する
+function showObachanMessage() {
+  // 0 から「セリフの数 − 1」までの番号を、ランダムに1つ作る
+  const index = Math.floor(Math.random() * OBACHAN_MESSAGES.length);
+  const messageElement = document.getElementById("obachan-message");
+  messageElement.textContent = OBACHAN_MESSAGES[index];
+}
+
 // localStorage に保存するときのキーの名前
 const STORAGE_KEY = "giridai-list";
 
@@ -495,6 +515,7 @@ function addItem() {
 }
 
 showToday();
+showObachanMessage();
 removePastItems();
 showItems();
 
