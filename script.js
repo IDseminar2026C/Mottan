@@ -53,11 +53,40 @@ function formatDate(dateText) {
   return Number(parts[0]) + "年" + Number(parts[1]) + "月" + Number(parts[2]) + "日";
 }
 
+// 「2026-09-29」の形の日付の、1週間後の日付を「2026-10-06」の形で返す
+function addOneWeek(dateText) {
+  const parts = dateText.split("-");
+  // 時差でずれないように、世界共通の時間（UTC）で日付を作る
+  // （日に 7 を足すと、月や年の終わりをまたいでも正しく次の月・年になる）
+  const nextWeek = new Date(Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]) + 7));
+  // 「2026-10-06T00:00:00.000Z」の形の文字から、先頭の10文字（年-月-日）だけを取り出す
+  return nextWeek.toISOString().slice(0, 10);
+}
+
+// 日付が今日以降になるまで、1週間ずつ進めた日付を返す
+function moveToTodayOrLater(dateText, today) {
+  // 進めている途中の日付
+  let date = dateText;
+  while (date < today) {
+    date = addOneWeek(date);
+  }
+  return date;
+}
+
 // 過ぎた日（昨日より前）の持ち物を保存データから消す
+// ただし「毎週」の持ち物は消さずに、今日以降になるまで日付を進める
 function removePastItems() {
   // 今日の日付（「2026-09-29」の形）
   const today = getTodayKey();
   const items = loadItems();
+
+  // 「毎週」の持ち物の日付を進める
+  for (const item of items) {
+    if (item.repeat === true) {
+      item.date = moveToTodayOrLater(item.date, today);
+    }
+  }
+
   // 日付が今日か、今日より後のものだけを残す
   // （「年-月-日」の形の文字は、そのまま大きさをくらべると日付の前後がわかる）
   const remainingItems = items.filter((item) => item.date >= today);
@@ -250,6 +279,9 @@ function addItem() {
   const name = nameInput.value.trim();
   // 選ばれた日付（「2026-09-29」の形）
   const date = document.getElementById("item-date").value;
+  // 「毎週くりかえす」のチェック欄（チェックが入っていれば true）
+  const repeatInput = document.getElementById("item-repeat");
+  const repeat = repeatInput.checked;
 
   if (name === "") {
     showError("持ち物・課題の名前を入力してください");
@@ -261,13 +293,18 @@ function addItem() {
   }
 
   // 新しい持ち物（id は、あとで削除するときに見分けるための番号）
-  const newItem = { id: Date.now(), name: name, date: date };
+  // repeat が true のものは「毎週」の持ち物
+  const newItem = { id: Date.now(), name: name, date: date, repeat: repeat };
   const items = loadItems();
   items.push(newItem);
   saveItems(items);
 
   showError("");
   nameInput.value = "";
+  // 次の持ち物がまちがって「毎週」にならないように、チェックを外しておく
+  repeatInput.checked = false;
+  // 過去の日付で追加されたときのために、日付を進める・消す処理をここでも動かす
+  removePastItems();
   showItems();
 }
 

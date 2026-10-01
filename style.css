@@ -166,6 +166,23 @@ body {
   cursor: pointer;
 }
 
+/* 「毎週くりかえす」のチェック欄（四角と文字を横にならべる） */
+.repeat-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* チェックの四角（指で押しやすいように少し大きくする） */
+.repeat-input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+
 .add-button {
   width: 100%;
   padding: 12px;
